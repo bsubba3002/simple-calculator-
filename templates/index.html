@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator</title>
+</head>
+<body style="font-family: Arial, sans-serif; text-align: center; margin: 50px;">
+
+    <h2>Simple Calculator</h2>
+    
+    <div style="display: inline-block; padding: 20px; border: 2px solid #333; border-radius: 10px;">
+        <input type="text" id="input1" placeholder="First Number" readonly style="margin: 5px; padding: 10px; font-size: 16px; width: 80px;"><br>
+        
+        <div>
+            <button onclick="appendNumber(1)" style="width: 50px; height: 50px;">1</button>
+            <button onclick="appendNumber(2)" style="width: 50px; height: 50px;">2</button>
+            <button onclick="appendNumber(3)" style="width: 50px; height: 50px;">3</button><br>
+            <button onclick="appendNumber(4)" style="width: 50px; height: 50px;">4</button>
+            <button onclick="appendNumber(5)" style="width: 50px; height: 50px;">5</button>
+            <button onclick="appendNumber(6)" style="width: 50px; height: 50px;">6</button><br>
+            <button onclick="appendNumber(7)" style="width: 50px; height: 50px;">7</button>
+            <button onclick="appendNumber(8)" style="width: 50px; height: 50px;">8</button>
+            <button onclick="appendNumber(9)" style="width: 50px; height: 50px;">9</button><br>
+            <button onclick="appendNumber(0)" style="width: 50px; height: 50px;">0</button>
+        </div>
+        <br>
+
+        <input type="text" id="operator" placeholder="Operator" readonly style="margin: 5px; padding: 10px; font-size: 16px; width: 80px;"><br>
+
+        <div>
+            <button onclick="setOperation('+')" style="width: 50px; height: 50px;">+</button>
+            <button onclick="setOperation('-')" style="width: 50px; height: 50px;">-</button>
+            <button onclick="setOperation('*')" style="width: 50px; height: 50px;">*</button>
+            <button onclick="setOperation('/')" style="width: 50px; height: 50px;">/</button>
+        </div>
+        <br>
+
+        <input type="text" id="input2" placeholder="Second Number" readonly style="margin: 5px; padding: 10px; font-size: 16px; width: 80px;"><br>
+
+        <button onclick="calculate()" style="margin: 5px; padding: 10px; font-size: 18px;">=</button>
+        <button onclick="clearDisplay()" style="margin: 5px; padding: 10px; font-size: 18px;">C</button>
+
+        <h3>Result: <span id="result"></span></h3>
+    </div>
+
+    <script>
+        let selectedOperation = '';
+        let num1 = '';
+        let num2 = '';
+        let isSecondNumber = false;
+
+        function appendNumber(number) {
+            if (!isSecondNumber) {
+                num1 += number;
+                document.getElementById('input1').value = num1;
+            } else {
+                num2 += number;
+                document.getElementById('input2').value = num2;
+            }
+        }
+
+        function setOperation(operation) {
+            if (num1 !== '') {
+                selectedOperation = operation;
+                document.getElementById('operator').value = operation;
+                isSecondNumber = true;
+            }
+        }
+
+        function clearDisplay() {
+            num1 = '';
+            num2 = '';
+            selectedOperation = '';
+            isSecondNumber = false;
+            document.getElementById('input1').value = '';
+            document.getElementById('operator').value = '';
+            document.getElementById('input2').value = '';
+            document.getElementById('result').innerText = '';
+        }
+
+        function calculate() {
+            if (num1 !== '' && num2 !== '' && selectedOperation !== '') {
+                fetch('/calculate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `num1=${num1}&num2=${num2}&operation=${selectedOperation}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('result').innerText = data.error;
+                    } else {
+                        document.getElementById('result').innerText = data.result;
+                        num1 = data.result;
+                        num2 = '';
+                        selectedOperation = '';
+                        isSecondNumber = false;
+                        document.getElementById('input1').value = num1;
+                        document.getElementById('operator').value = '';
+                        document.getElementById('input2').value = '';
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
