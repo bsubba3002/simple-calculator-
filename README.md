@@ -1,3 +1,6 @@
+🧮 Simple Calculator - Your Go-To Math Assistant! ✨
+Welcome to the Simple Calculator project! This is a sleek and minimalistic calculator built with HTML, CSS, and JavaScript. Whether you need basic math operations or just want to play around with numbers, this is the perfect tool for you! 😎💡
+
 🔧 Features & Highlights 🌟
 💡 Easy-to-Use Interface: A clean and simple layout that makes calculations fun!
 
