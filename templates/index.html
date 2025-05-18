@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Professional Calculator</title>
+  <title>Calculator</title>
 </head>
 <body style="
   font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(to right, #e0f7fa, #fffde7);
+  background: linear-gradient(to right, #e1f5fe, #fff8e1);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,114 +16,104 @@
 ">
 
   <div style="
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-    border-radius: 15px;
+    background: white;
     padding: 2rem;
-    max-width: 400px;
+    border-radius: 15px;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+    max-width: 360px;
     width: 100%;
   ">
     <h2 style="
       text-align: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.2rem;
       color: #00796b;
-    ">🧮 Professional Calculator</h2>
+    ">🧮 Om.ai Calculator</h2>
 
-    <form id="calcForm">
-      <label for="num1" style="font-weight: bold; color: #333;">Number 1:</label>
-      <input type="number" id="num1" name="num1" step="any" required style="
-        width: 100%;
-        padding: 10px;
-        margin: 8px 0 15px 0;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        font-size: 1rem;
-      ">
+    <input id="display" type="text" disabled style="
+      width: 100%;
+      padding: 15px;
+      font-size: 1.5rem;
+      text-align: right;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      background: #f0f4c3;
+      color: #333;
+    " />
 
-      <label for="num2" style="font-weight: bold; color: #333;">Number 2:</label>
-      <input type="number" id="num2" name="num2" step="any" required style="
-        width: 100%;
-        padding: 10px;
-        margin: 8px 0 15px 0;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        font-size: 1rem;
-      ">
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+      <!-- Number Buttons -->
+      <button onclick="append('7')" style="grid-column: span 1;">7</button>
+      <button onclick="append('8')">8</button>
+      <button onclick="append('9')">9</button>
+      <button onclick="append('/')" style="background-color: #e0f2f1;">÷</button>
 
-      <label for="operation" style="font-weight: bold; color: #333;">Operation:</label>
-      <select id="operation" name="operation" required style="
-        width: 100%;
-        padding: 10px;
-        margin: 8px 0 20px 0;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        font-size: 1rem;
-        background-color: #fafafa;
-      ">
-        <option value="+">Add (+)</option>
-        <option value="-">Subtract (-)</option>
-        <option value="*">Multiply (*)</option>
-        <option value="/">Divide (/)</option>
-      </select>
+      <button onclick="append('4')">4</button>
+      <button onclick="append('5')">5</button>
+      <button onclick="append('6')">6</button>
+      <button onclick="append('*')" style="background-color: #e0f2f1;">×</button>
 
-      <button type="submit" style="
-        width: 100%;
-        padding: 12px;
-        font-size: 1.1rem;
+      <button onclick="append('1')">1</button>
+      <button onclick="append('2')">2</button>
+      <button onclick="append('3')">3</button>
+      <button onclick="append('-')" style="background-color: #e0f2f1;">−</button>
+
+      <button onclick="append('0')">0</button>
+      <button onclick="append('.')">.</button>
+      <button onclick="clearDisplay()" style="background-color: #ffcdd2;">C</button>
+      <button onclick="append('+')" style="background-color: #e0f2f1;">+</button>
+
+      <button onclick="calculate()" style="
+        grid-column: span 4;
         background-color: #00796b;
         color: white;
-        border: none;
+        padding: 12px;
+        font-size: 1.2rem;
         border-radius: 8px;
-        cursor: pointer;
-        transition: background 0.3s ease;
-      " onmouseover="this.style.backgroundColor='#004d40'" onmouseout="this.style.backgroundColor='#00796b'">
-        Calculate
-      </button>
-    </form>
-
-    <div id="result" style="
-      margin-top: 20px;
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #444;
-    "></div>
+      ">Calculate</button>
+    </div>
   </div>
 
   <script>
-    document.getElementById('calcForm').addEventListener('submit', function(e) {
-      e.preventDefault();
+    const display = document.getElementById('display');
 
-      const num1 = document.getElementById('num1').value.trim();
-      const num2 = document.getElementById('num2').value.trim();
-      const operation = document.getElementById('operation').value;
-      const resultDiv = document.getElementById('result');
+    function append(value) {
+      display.value += value;
+    }
 
-      // Client-side calculation fallback
-      let result;
+    function clearDisplay() {
+      display.value = '';
+    }
+
+    function calculate() {
       try {
-        const a = parseFloat(num1);
-        const b = parseFloat(num2);
-        if (isNaN(a) || isNaN(b)) throw new Error("Invalid input");
-
-        switch (operation) {
-          case '+': result = a + b; break;
-          case '-': result = a - b; break;
-          case '*': result = a * b; break;
-          case '/':
-            if (b === 0) throw new Error("Cannot divide by zero");
-            result = a / b;
-            break;
-          default: throw new Error("Unknown operation");
-        }
-        resultDiv.innerHTML = `✅ Result: <span style="color: #00796b;">${result}</span>`;
-      } catch (err) {
-        resultDiv.innerHTML = `<span style="color: red;">❌ Error: ${err.message}</span>`;
+        const result = eval(display.value);
+        display.value = result;
+      } catch {
+        display.value = 'Error';
       }
-
-      // If you'd like to use backend calculation, replace the above logic with fetch()
-    });
+    }
   </script>
+
+  <style>
+    button {
+      padding: 15px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #f5f5f5;
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #dcedc8;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+  </style>
 
 </body>
 </html>
