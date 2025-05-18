@@ -45,5 +45,10 @@ Ready to try it out? Follow these simple steps:
 ### 1. Clone the Repository 🔥
 Clone the project repository to your local machine using the following command:
 
+
+🌐 Live Demo 🖥️
+You don’t need to clone anything to try out the calculator. Visit the live demo here:
+
+Live Demo ✨
+**https://simple-calculator-9qjz.onrender.com/**
 ```bash
-git clone https://github.com/your-username/simple-calculator.git
